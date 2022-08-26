@@ -121,6 +121,7 @@ class _ClockWidgetState extends State<ClockWidget> {
     return Container(
       padding: const EdgeInsets.all(15),
       child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
         children: [
           Text(
             DateFormat('h:mm a').format(_dateTime),

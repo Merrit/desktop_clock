@@ -12,7 +12,7 @@ class WrapperState extends Equatable {
   factory WrapperState.initial() {
     return const WrapperState(
       isHovered: false,
-      isLocked: false,
+      isLocked: true,
     );
   }
 

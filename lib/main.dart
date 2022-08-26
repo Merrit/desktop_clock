@@ -21,6 +21,9 @@ void main() async {
 
   windowManager.waitUntilReadyToShow(windowOptions, () async {
     // await windowManager.setMaximizable(false); // Not implemented.
+    await windowManager.setAlwaysOnBottom(true);
+    await windowManager.setMaximumSize(const Size(800, 800));
+    await windowManager.setMinimumSize(const Size(260, 168));
     await windowManager.show();
   });
 

@@ -73,19 +73,24 @@ class AppWindow {
 
   Future<void> setWindowSizeAndPosition() async {
     print('Setting window size and position.');
-    Rect bounds = await windowManager.getBounds();
+    Rect currentWindowFrame = await windowManager.getBounds();
     print(
-      'Current: ${bounds.left}, ${bounds.top}, ${bounds.width}, ${bounds.height}',
+      'Current: ${currentWindowFrame.left}, ${currentWindowFrame.top}, ${currentWindowFrame.width}, ${currentWindowFrame.height}',
     );
 
-    Rect? windowFrame = await getSavedWindowSizeAndPosition();
-    windowFrame ??= const Rect.fromLTWH(0, 0, 300, 180);
+    Rect? targetWindowFrame = await getSavedWindowSizeAndPosition();
+    targetWindowFrame ??= const Rect.fromLTWH(0, 0, 300, 180);
 
-    window.setWindowFrame(windowFrame);
+    if (targetWindowFrame == currentWindowFrame) {
+      print('Target matches current window frame, nothing to do.');
+      return;
+    }
 
-    bounds = await windowManager.getBounds();
+    window.setWindowFrame(targetWindowFrame);
+
+    currentWindowFrame = await windowManager.getBounds();
     print(
-      'New: ${bounds.left}, ${bounds.top}, ${bounds.width}, ${bounds.height}',
+      'New: ${currentWindowFrame.left}, ${currentWindowFrame.top}, ${currentWindowFrame.width}, ${currentWindowFrame.height}',
     );
   }
 }

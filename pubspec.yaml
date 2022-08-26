@@ -1,0 +1,45 @@
+name: desktop_clock
+description: A new Flutter project.
+
+# Prevent accidental publishing to pub.dev.
+publish_to: "none"
+
+version: 1.0.0+1
+
+environment:
+  sdk: ">=2.17.5 <3.0.0"
+
+dependencies:
+  equatable: ^2.0.3
+  flutter:
+    sdk: flutter
+  flutter_bloc: ^8.0.1
+  flutter_localizations:
+    sdk: flutter
+  hive_flutter: ^1.1.0
+  intl: ^0.17.0
+  logging: ^1.0.2
+  path_provider: ^2.0.11
+  tray_manager: ^0.1.8
+  window_manager: ^0.2.6
+  window_size:
+    git:
+      url: https://github.com/google/flutter-desktop-embedding.git
+      path: plugins/window_size
+      ref: 03d957e8b5c99fc83cd4a781031b154ab3de8753
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+
+  flutter_lints: ^2.0.0
+
+flutter:
+  uses-material-design: true
+
+  # Enable generation of localized Strings from arb files.
+  generate: true
+
+  assets:
+    # Add assets from the images directory to the application.
+    - assets/icons/

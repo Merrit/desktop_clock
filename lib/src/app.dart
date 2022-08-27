@@ -1,3 +1,5 @@
+// ignore_for_file: avoid_print
+
 import 'dart:async';
 
 import 'package:flutter/material.dart';
@@ -85,7 +87,7 @@ class _HomeWidgetState extends State<HomeWidget>
       timer = Timer(
         const Duration(seconds: 30),
         () {
-          print('Timer triggered!');
+          print('Timer triggered');
           appWindow.setWindowSizeAndPosition();
         },
       );

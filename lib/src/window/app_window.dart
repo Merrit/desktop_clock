@@ -1,6 +1,9 @@
-import 'dart:io';
-import 'dart:ui';
+// ignore_for_file: avoid_print
 
+import 'dart:convert';
+import 'dart:io';
+
+import 'package:flutter/material.dart';
 import 'package:window_manager/window_manager.dart';
 import 'package:window_size/window_size.dart' as window;
 
@@ -11,6 +14,7 @@ final appWindow = AppWindow();
 class AppWindow {
   AppWindow._() {
     instance = this;
+    initialize();
   }
 
   static late final AppWindow instance;
@@ -21,6 +25,24 @@ class AppWindow {
 
     _initialized = true;
     return AppWindow._();
+  }
+
+  void initialize() {
+    WindowOptions windowOptions = const WindowOptions(
+      backgroundColor: Colors.transparent,
+      skipTaskbar: true,
+      titleBarStyle: TitleBarStyle.hidden,
+    );
+
+    windowManager.waitUntilReadyToShow(windowOptions, () async {
+      // await windowManager.setMaximizable(false); // Not implemented.
+      await windowManager.setAlwaysOnBottom(true);
+      await windowManager.setBackgroundColor(Colors.transparent);
+      await windowManager.setMaximumSize(const Size(800, 800));
+      await windowManager.setMinimumSize(const Size(110, 110));
+      await AppWindow().setWindowSizeAndPosition();
+      await windowManager.show();
+    });
   }
 
   void close() => exit(0);
@@ -41,18 +63,12 @@ class AppWindow {
   }
 
   Future<Rect?> getSavedWindowSizeAndPosition() async {
-    final savedPosition = await StorageService.instance! //
+    final savedPosition = await StorageService //
+        .instance!
         .getValue(await _getScreenConfigId());
     if (savedPosition == null) return null;
 
-    final positionMap = Map<String, double>.from(savedPosition);
-    final windowRect = Rect.fromLTWH(
-      positionMap['left']!,
-      positionMap['top']!,
-      positionMap['width']!,
-      positionMap['height']!,
-    );
-
+    final windowRect = rectFromJson(savedPosition);
     return windowRect;
   }
 
@@ -62,21 +78,13 @@ class AppWindow {
 
     await StorageService.instance!.saveValue(
       key: await _getScreenConfigId(),
-      value: {
-        'left': bounds.left,
-        'top': bounds.top,
-        'width': bounds.width,
-        'height': bounds.height,
-      },
+      value: bounds.toJson(),
     );
   }
 
   Future<void> setWindowSizeAndPosition() async {
     print('Setting window size and position.');
     Rect currentWindowFrame = await windowManager.getBounds();
-    print(
-      'Current: ${currentWindowFrame.left}, ${currentWindowFrame.top}, ${currentWindowFrame.width}, ${currentWindowFrame.height}',
-    );
 
     Rect? targetWindowFrame = await getSavedWindowSizeAndPosition();
     targetWindowFrame ??= const Rect.fromLTWH(0, 0, 300, 180);
@@ -86,11 +94,31 @@ class AppWindow {
       return;
     }
 
-    window.setWindowFrame(targetWindowFrame);
+    assert(targetWindowFrame.size >= const Size(110, 110));
 
-    currentWindowFrame = await windowManager.getBounds();
-    print(
-      'New: ${currentWindowFrame.left}, ${currentWindowFrame.top}, ${currentWindowFrame.width}, ${currentWindowFrame.height}',
-    );
+    window.setWindowFrame(targetWindowFrame);
   }
+}
+
+extension on Rect {
+  Map<String, dynamic> toMap() {
+    return {
+      'left': left,
+      'top': top,
+      'right': right,
+      'bottom': bottom,
+    };
+  }
+
+  String toJson() => json.encode(toMap());
+}
+
+Rect rectFromJson(String source) {
+  final Map<String, dynamic> map = json.decode(source);
+  return Rect.fromLTRB(
+    map['left'],
+    map['top'],
+    map['right'],
+    map['bottom'],
+  );
 }

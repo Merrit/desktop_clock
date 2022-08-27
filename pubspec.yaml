@@ -21,10 +21,7 @@ dependencies:
   logging: ^1.0.2
   path_provider: ^2.0.11
   tray_manager: ^0.1.8
-  # window_manager: ^0.2.6
-  window_manager:
-    git:
-      url: https://github.com/Merrit/window_manager.git
+  window_manager: ^0.2.7
   window_size:
     git:
       url: https://github.com/google/flutter-desktop-embedding.git

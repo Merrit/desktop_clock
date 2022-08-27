@@ -28,9 +28,11 @@ class WrapperWidget extends StatelessWidget {
                   alignment: Alignment.center,
                   fit: StackFit.expand,
                   children: const [
-                    Padding(
-                      padding: EdgeInsets.all(16.0),
-                      child: ClockWidget(),
+                    FittedBox(
+                      child: Padding(
+                        padding: EdgeInsets.all(4.0),
+                        child: ClockWidget(),
+                      ),
                     ),
                     _LockMoveControls(),
                     _ResizeControl(Alignment.topLeft),
@@ -58,22 +60,25 @@ class _LockMoveControls extends StatelessWidget {
         alignment: Alignment.centerRight,
         child: BlocBuilder<WrapperCubit, WrapperState>(
           builder: (context, state) {
-            return Opacity(
-              opacity: state.isHovered ? 0.8 : 0,
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  GestureDetector(
+            return Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Opacity(
+                  opacity: (state.isHovered || !state.isLocked) ? 0.8 : 0,
+                  child: GestureDetector(
                     onTap: () => wrapperCubit.toggleIsLocked(),
                     child: Icon(
                       state.isLocked ? Icons.lock : Icons.lock_open,
                     ),
                   ),
-                  Visibility(
-                    visible: !state.isLocked,
-                    maintainAnimation: true,
-                    maintainSize: true,
-                    maintainState: true,
+                ),
+                Visibility(
+                  visible: !state.isLocked,
+                  maintainAnimation: true,
+                  maintainSize: true,
+                  maintainState: true,
+                  child: Opacity(
+                    opacity: 0.8,
                     child: GestureDetector(
                       onTapDown: (details) {
                         if (state.isLocked) return;
@@ -84,8 +89,8 @@ class _LockMoveControls extends StatelessWidget {
                       child: const Icon(Icons.drag_indicator),
                     ),
                   ),
-                ],
-              ),
+                ),
+              ],
             );
           },
         ),

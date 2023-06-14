@@ -7,7 +7,7 @@ publish_to: "none"
 version: 1.0.0+1
 
 environment:
-  sdk: ">=2.17.5 <3.0.0"
+  sdk: ">=3.0.0 <4.0.0"
 
 dependencies:
   equatable: ^2.0.3
@@ -17,7 +17,7 @@ dependencies:
   flutter_localizations:
     sdk: flutter
   hive_flutter: ^1.1.0
-  intl: ^0.17.0
+  intl: ^0.18.0
   logging: ^1.0.2
   path_provider: ^2.0.11
   tray_manager: ^0.1.8
@@ -41,5 +41,4 @@ flutter:
   generate: true
 
   assets:
-    # Add assets from the images directory to the application.
     - assets/icons/
